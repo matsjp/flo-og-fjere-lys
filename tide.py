@@ -2,17 +2,8 @@ import urllib.request
 import datetime
 import re
 import time
-import tweepy
 import random
 
-#enter the corresponding information from your Twitter application:
-CONSUMER_KEY = 'vlgFZR0FNwx8LK712NDeuOWIm'#keep the quotes, replace this with your consumer key
-CONSUMER_SECRET = 'ox7giq00SMZqpB4tPfM639RsARtiUgESSTOkE2P2eDQfxhHnZZ'#keep the quotes, replace this with your consumer secret key
-ACCESS_KEY = '778961679115845632-SHch5TAREoZIbiv4BBhfPZdqqVF51ZP'#keep the quotes, replace this with your access token
-ACCESS_SECRET = '3xSzZdPiaRi00lWEfbajQifQX3mkTMzQrqpKOFjXh32Tu'#keep the quotes, replace this with your access token secret
-auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-api = tweepy.API(auth)
 
 dataList = []
 #B = flo R = fjære
@@ -21,6 +12,7 @@ lightArray = []
 direction = False
 lightTracker = 0
 lastChangeTimestamp = 0
+
 
 def updateTidetxt(tomorrow = False):
     if tomorrow == False:
@@ -44,7 +36,7 @@ def updateTidetxt(tomorrow = False):
         finishedUrl = re.sub("MONTH", month, finishedUrl)
         finishedUrl = re.sub("DAY", day, finishedUrl)
         finishedUrl = re.sub("DAY", day, finishedUrl)
-        downloadLocation = r"C:\Users\Bruker\Documents\floogfjære\tideInfo.txt"
+        downloadLocation = r"tideInfo.txt"
 
         # This downloads the file
         urllib.request.urlretrieve(finishedUrl, downloadLocation)
@@ -80,7 +72,7 @@ def updateTidetxt(tomorrow = False):
         finishedUrl = re.sub("MONTH", month, finishedUrl)
         finishedUrl = re.sub("DAY", day, finishedUrl)
         finishedUrl = re.sub("DAY", day, finishedUrl)
-        downloadLocation = r"C:\Users\Bruker\Documents\floogfjære\tideInfo.txt"
+        downloadLocation = r"tideInfo.txt"
 
         # This downloads the file
         urllib.request.urlretrieve(finishedUrl, downloadLocation)
@@ -107,15 +99,15 @@ def handleData():
         month = lineList[i][5:7]
         day = lineList[i][8:10]
         klokke = lineList[i][11:16]
-        høyde = lineList[i][-6:-3]
-        if " " in høyde:
-        høyde = høyde[1:]
-        høyde = int(høyde)
+        hoyde = lineList[i][-6:-3]
+        if " " in hoyde:
+        	hoyde = hoyde[1:]
+        hoyde = int(hoyde)
         myList.append(year)
         myList.append(month)
         myList.append(day)
         myList.append(klokke)
-        myList.append(høyde)
+        myList.append(hoyde)
         dataList.append(myList)
 
     #I determine wether the height of the water indicates flo or fjære
@@ -171,7 +163,6 @@ while True:
     if timestampNow > dataList[0][6]:
         msg = dataList[0][0], dataList[0][1], dataList[0][2], dataList[0][3], dataList[0][4], dataList[0][5], \
                 dataList[0][6], direction, random.randint(2000, 10000)
-        api.update_status(msg)
         # forandre retning på lyset
         direction = not direction
         lastChangeTimestamp = dataList[0][6]
@@ -216,15 +207,10 @@ while True:
             else:
                 lightArray = ["B", "B", "B"]
             lightTracker = 5
-    else:
-        msg = "This is not supposed to happen", random.randint(1, 10000)
-        api.update_status(msg)
 
     if lightArray != []:
         now = datetime.datetime.now()
-        msg = now, lightArray, random.randint(2000, 10000)
         lightSwitch(lightArray, direction)
-        api.update_status(msg)
 
     lightArray = []
     time.sleep(30)
