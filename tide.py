@@ -58,7 +58,7 @@ def updateTidetxt(tomorrow = False):
         # I put data into a new file to make data handling easier
         newFile = open("tide.txt", "w")
         newFile.writelines(newLineList)
-        newFile.close
+        newFile.close()
     else:
         # Getting year, month and day and storing them in variables
         # I am doing this because every day i get a new txt document corresponding for tide info for that given day
@@ -94,7 +94,7 @@ def updateTidetxt(tomorrow = False):
         # I put data into a new file to make data handling easier
         newFile = open("tide.txt", "w")
         newFile.writelines(newLineList)
-        newFile.close
+        newFile.close()
 
 def handleData():
     #I get data from the file and store it in a list
@@ -109,7 +109,7 @@ def handleData():
         klokke = lineList[i][11:16]
         høyde = lineList[i][-6:-3]
         if " " in høyde:
-            høyde = høyde[1:]
+        høyde = høyde[1:]
         høyde = int(høyde)
         myList.append(year)
         myList.append(month)
@@ -137,6 +137,30 @@ def handleData():
             tempString = dataList[a][0] + " " + dataList[a][1] + " " + dataList[a][2] + " " + dataList[a][3]
             tempDate = datetime.datetime.strptime(tempString, "%Y %m %d %H:%M")
             dataList[a].append(tempDate.timestamp())
+
+def lightSwitch(lightArray, direction):
+    if direction == True:
+        pass
+    else:
+        pass
+
+    if lightArray[0] == "B":
+        pass
+    else:
+        pass
+
+    if lightArray[1] == "B":
+        pass
+    elif lightArray[1] == "R":
+        pass
+    else:
+        pass
+
+    if lightArray[2] == "B":
+        pass
+    else:
+        pass
+
 #get data of first startup
 updateTidetxt()
 handleData()
@@ -158,15 +182,15 @@ while True:
 
     if (timestampNow - lastChangeTimestamp) / (dataList[0][6] - lastChangeTimestamp) > 0.8:
         if lightTracker != 1:
-            if direction == True:
-                    lightArray = ["B", "B", "B"]
+            if direction:
+                lightArray = ["B", "B", "B"]
             else:
                 lightArray = ["R", "R", "R"]
             lightTracker = 1
 
     elif (timestampNow - lastChangeTimestamp) / (dataList[0][6] - lastChangeTimestamp) > 0.6:
         if lightTracker != 2:
-            if direction == True:
+            if direction:
                 lightArray = ["R", "B", "B"]
             else:
                 lightArray = ["R", "R", "B"]
@@ -179,7 +203,7 @@ while True:
 
     elif (timestampNow - lastChangeTimestamp) / (dataList[0][6] - lastChangeTimestamp) > 0.2:
         if lightTracker != 4:
-            if direction == True:
+            if direction:
                 lightArray = ["R", "R", "B"]
             else:
                 lightArray = ["R", "B", "B"]
@@ -187,7 +211,7 @@ while True:
 
     elif (timestampNow - lastChangeTimestamp) / (dataList[0][6] - lastChangeTimestamp) > 0:
         if lightTracker != 5:
-            if direction == True:
+            if direction:
                 lightArray = ["R", "R", "R"]
             else:
                 lightArray = ["B", "B", "B"]
@@ -199,6 +223,7 @@ while True:
     if lightArray != []:
         now = datetime.datetime.now()
         msg = now, lightArray, random.randint(2000, 10000)
+        lightSwitch(lightArray, direction)
         api.update_status(msg)
 
     lightArray = []
